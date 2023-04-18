@@ -14,21 +14,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _GameField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GameField */ "./client/src/components/GameField.jsx");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./client/src/components/game/index.jsx");
+/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./header */ "./client/src/components/header/index.js");
+
 
 
 function App() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     id: "App"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GameField__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "header"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_header__WEBPACK_IMPORTED_MODULE_2__.PageHeader, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_header__WEBPACK_IMPORTED_MODULE_2__.UserLogin, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_game__WEBPACK_IMPORTED_MODULE_1__.GameField, null)));
 }
 
 /***/ }),
 
-/***/ "./client/src/components/GameField.jsx":
-/*!*********************************************!*\
-  !*** ./client/src/components/GameField.jsx ***!
-  \*********************************************/
+/***/ "./client/src/components/game/GameField.jsx":
+/*!**************************************************!*\
+  !*** ./client/src/components/game/GameField.jsx ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -38,12 +44,88 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-var GameField = function GameField() {
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GameField = function GameField() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     id: "gameField"
   }, "Game field");
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GameField);
+});
+
+/***/ }),
+
+/***/ "./client/src/components/game/index.jsx":
+/*!**********************************************!*\
+  !*** ./client/src/components/game/index.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GameField": () => (/* reexport safe */ _GameField__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _GameField__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GameField */ "./client/src/components/game/GameField.jsx");
+
+
+
+/***/ }),
+
+/***/ "./client/src/components/header/PageHeader.jsx":
+/*!*****************************************************!*\
+  !*** ./client/src/components/header/PageHeader.jsx ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader = function PageHeader() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "page-header"
+  }, "Title");
+});
+
+/***/ }),
+
+/***/ "./client/src/components/header/UserLogin.jsx":
+/*!****************************************************!*\
+  !*** ./client/src/components/header/UserLogin.jsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserLogin = function UserLogin() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "user-login"
+  }, "user login");
+});
+
+/***/ }),
+
+/***/ "./client/src/components/header/index.js":
+/*!***********************************************!*\
+  !*** ./client/src/components/header/index.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PageHeader": () => (/* reexport safe */ _PageHeader__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "UserLogin": () => (/* reexport safe */ _UserLogin__WEBPACK_IMPORTED_MODULE_1__["default"])
+/* harmony export */ });
+/* harmony import */ var _PageHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PageHeader */ "./client/src/components/header/PageHeader.jsx");
+/* harmony import */ var _UserLogin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserLogin */ "./client/src/components/header/UserLogin.jsx");
+
+
+
 
 /***/ }),
 

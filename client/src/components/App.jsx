@@ -1,11 +1,18 @@
 import React from 'react';
-import GameField from './GameField';
+import { GameField } from './game';
+import { PageHeader, UserLogin } from './header';
 
 export default function App() {
 
   return (
     <div id="App">
-      <GameField/>
+      <div id="header">
+        <PageHeader />
+        <UserLogin />
+      </div>
+      <div id="body">
+        <GameField />
+      </div>
     </div>
   );
 }
