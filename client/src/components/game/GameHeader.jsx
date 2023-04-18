@@ -3,6 +3,6 @@ import React from 'react';
 export default () => {
 
   return (
-    <div id="user-login">User login</div>
+    <div id="game-header">Game Header</div>
   )
 }

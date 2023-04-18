@@ -1,9 +1,8 @@
 import React from 'react';
 
-export default PageHeader = () => {
+export default () => {
 
   return (
-    <div id='page-header'>Title</div>
+    <div id="page-header">Mathstroids</div>
   )
 }
-
