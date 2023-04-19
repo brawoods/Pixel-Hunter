@@ -3,12 +3,13 @@ import { GameHeader, Canvas } from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
-  const initialPlayer = [[4, 10]];
-  const initialSolution = [[2, 8], [2, 8]];
+  const initialPlayer = [2, 8];
+  const initialSolution = [initialPlayer[0]*5, initialPlayer[1]*5];
   const initialProblem = [1, 1];
+  const scale = 20;
 
-  const [problem, setProblem] = useState(initialProblem);
   const [player, setPlayer] = useState(initialPlayer);
+  const [problem, setProblem] = useState(initialProblem);
   const [solution, setSolution] = useState(initialSolution);
   // const [enemies, setEnemies] = useState(initialEnemies);
   const [direction, setDirection] = useState([0, -1]);
@@ -25,35 +26,55 @@ export default function App() {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // player
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      ctx.fillStyle = 'green';
+      ctx.fillRect(player[0], player[1], 1, 1);
+      // solution
+      ctx.setTransform(scale/5, 0, 0, scale/5, 0, 0);
+      ctx.fillStyle = 'blue';
+      ctx.fillText('2', solution[0], solution[1]);
     }
-  }, []);
+  }, [player]);
 
-  function changeCoord([x, y]) {
-    let newPlayer = [...player];
-    newPlayer = [newPlayer[0][0] + x, newPlayer[0][1] + y];
-    console.log('new player: ', newPlayer);
-    setPlayer(newPlayer);
+  function changeDirection([x, y]) {
+    const newPlayer = [...player];
+    const nextPosition = [newPlayer[0] + x, newPlayer[1] + y];
+    // check if play area boudary
+    if (nextPosition[0] < 0) {
+      nextPosition[0] = 0;
+    }
+    if (nextPosition[0] >= scale) {
+      nextPosition[0] = scale - 1;
+    }
+    if (nextPosition[1] < 0) {
+      nextPosition[1] = 0;
+    }
+    if (nextPosition[1] >= scale) {
+      nextPosition[1] = scale - 1;
+    }
+    // check if bad answer
+    setPlayer(nextPosition);
   }
 
   function move(e) {
     switch (e.key) {
       case 'ArrowUp':
-        console.log(player);
-        changeCoord([0, -1]);
+        console.log('up', player);
+        changeDirection([0, -1]);
         break;
       case 'ArrowDown':
-        console.log(player);
-        changeCoord([0, 1]);
+        console.log('down', player);
+        changeDirection([0, 1]);
         break;
       case 'ArrowLeft':
-        console.log(player);
-        changeCoord([-1, 0]);
+        console.log('left', player);
+        changeDirection([-1, 0]);
         break;
       case 'ArrowRight':
-        console.log(player);
-        changeCoord([1, 0]);
+        console.log('right', player);
+        changeDirection([1, 0]);
         break;
       default:
     }
@@ -68,7 +89,7 @@ export default function App() {
       <div id="body">
         <GameHeader problem={problem} score={score} />
         {/* <Canvas /> */}
-        <canvas id="canvas" ref={canvasRef} tabIndex={0} onKeyDown={(e) => move(e)} />
+        <canvas id="canvas" ref={canvasRef} width="400" height="400" tabIndex={0} onKeyDown={(e) => move(e)} />
         <button type="button">Play</button>
       </div>
     </div>
