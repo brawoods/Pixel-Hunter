@@ -4,7 +4,7 @@ export default function Canvas() {
   const canvasRef = useRef(null);
   useEffect(() => {
     if (canvasRef.current) {
-      const canvas = document.getElementById('canvas');
+      const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -12,6 +12,9 @@ export default function Canvas() {
   }, []);
 
   return (
-    <canvas id="canvas" ref={canvasRef} />
+    <div>
+      <canvas id="canvas" ref={canvasRef} onKeyDown={e => console.log(e)} />
+    </div>
+
   );
 }
