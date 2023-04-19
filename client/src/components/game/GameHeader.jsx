@@ -1,7 +1,11 @@
 import React from 'react';
 
-export default function GameHeader() {
+export default function GameHeader({ problem, score }) {
   return (
-    <div id="game-header">Game Header</div>
+    <div id="game-header">
+      <div>Problem: {`${problem[0]} + ${problem[1]}`}</div>
+      <div>Score: {score}</div>
+      <div>High Score: {localStorage.getItem("MathstroidsScore")}</div>
+    </div>
   );
 }
