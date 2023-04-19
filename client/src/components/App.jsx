@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GameHeader, Canvas } from './game';
+import GameHeader from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
   const initialPlayer = [2, 8];
-  const initialSolution = [initialPlayer[0]*5, initialPlayer[1]*5];
+  const initialSolution = [initialPlayer[0]*5, initialPlayer[1]*5 + 5];
   const initialProblem = [1, 1];
   const scale = 20;
 
@@ -12,7 +12,6 @@ export default function App() {
   const [problem, setProblem] = useState(initialProblem);
   const [solution, setSolution] = useState(initialSolution);
   // const [enemies, setEnemies] = useState(initialEnemies);
-  const [direction, setDirection] = useState([0, -1]);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
 
@@ -80,6 +79,15 @@ export default function App() {
     }
   }
 
+  function play() {
+    setPlayer(initialPlayer);
+    setSolution(initialSolution);
+    setProblem(initialProblem);
+    setScore(0);
+    setGameOver(false);
+    // setEnemies(initialEnemies);
+  }
+
   return (
 <div id="App">
       <div id="header">
@@ -90,7 +98,7 @@ export default function App() {
         <GameHeader problem={problem} score={score} />
         {/* <Canvas /> */}
         <canvas id="canvas" ref={canvasRef} width="400" height="400" tabIndex={0} onKeyDown={(e) => move(e)} />
-        <button type="button">Play</button>
+        <button type="button" onClick={() => play()}>Play</button>
       </div>
     </div>
   );
