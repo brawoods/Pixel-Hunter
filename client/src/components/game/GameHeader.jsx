@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default () => {
-
+export default function GameHeader() {
   return (
     <div id="game-header">Game Header</div>
-  )
+  );
 }
