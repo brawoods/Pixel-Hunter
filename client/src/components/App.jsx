@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import useInterval from '../hooks';
 import GameHeader from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
-  const initialPlayer = [2, 8];
-  const initialSolution = [initialPlayer[0]*5, initialPlayer[1]*5 + 5];
-  const initialProblem = [1, 1];
   const scale = 20;
+  const initialPlayer = [scale / 2, scale / 2];
+  // const initialSolution = [initialPlayer[0] * 5 - 10, initialPlayer[1] * 5 + 10];
+  const initialSolution = [scale / 4, scale / 4];
+  const initialProblem = [1, 1];
+  const delay = 100;
 
   const [player, setPlayer] = useState(initialPlayer);
   const [problem, setProblem] = useState(initialProblem);
@@ -17,8 +20,35 @@ export default function App() {
 
   const canvasRef = useRef(null);
 
+  function generateProblem() {
+    const a = Math.floor(Math.random() * 5);
+    const b = Math.floor(Math.random() * 5);
+    return [a, b];
+  }
+
+  function checkCollision(piece1, piece2) {
+    // if player position matches solution position
+      // increase score by 1
+      // create new solution
+      // set random solution position
+    if (piece1[0] === piece2[0] && piece1[1] === piece2[1]) {
+      return true;
+    }
+  }
+
+  function runGame() {
+    // check collision
+    if (checkCollision(player, solution)) {
+      console.log('touched');
+    }
+    // move solution
+    // move enemies
+  }
+
   useEffect(() => {
     canvasRef.current.focus();
+    const newProblem = generateProblem();
+    setProblem(newProblem);
   }, []);
 
   useEffect(() => {
@@ -31,22 +61,21 @@ export default function App() {
       ctx.fillStyle = 'green';
       ctx.fillRect(player[0], player[1], 1, 1);
       // solution
-      ctx.setTransform(scale/5, 0, 0, scale/5, 0, 0);
+
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
       ctx.fillStyle = 'blue';
-      ctx.fillText('2', solution[0], solution[1]);
+      ctx.fillRect(solution[0], solution[1], 1, 1);
+      // number
+    //   const answer = (problem[0] + problem[1]).toString();
+    //   ctx.setTransform(scale / 5, 0, 0, scale / 5, 0, 0);
+    //   ctx.fillStyle = 'blue';
+    //   ctx.fillText(answer, solution[0], solution[1]);
     }
   }, [player]);
 
-  function generateProblem() {
-    let a = Math.floor(Math.random() * 5);
-    let b = Math.floor(Math.random() * 5);
-    return [a, b];
-  }
+  //set interval to check decisions of game
+  useInterval(() => runGame(), delay);
 
-  useEffect(() => {
-    const newProblem = generateProblem();
-    setProblem(newProblem);
-  }, []);
 
   function changeDirection([x, y]) {
     const newPlayer = [...player];
@@ -71,19 +100,19 @@ export default function App() {
   function move(e) {
     switch (e.key) {
       case 'ArrowUp':
-        console.log('up', player);
+        // console.log('up', player);
         changeDirection([0, -1]);
         break;
       case 'ArrowDown':
-        console.log('down', player);
+        // console.log('down', player);
         changeDirection([0, 1]);
         break;
       case 'ArrowLeft':
-        console.log('left', player);
+        // console.log('left', player);
         changeDirection([-1, 0]);
         break;
       case 'ArrowRight':
-        console.log('right', player);
+        // console.log('right', player);
         changeDirection([1, 0]);
         break;
       default:
@@ -97,11 +126,12 @@ export default function App() {
     setProblem(newProblem);
     setScore(0);
     setGameOver(false);
+    canvasRef.current.focus();
     // setEnemies(initialEnemies);
   }
 
   return (
-<div id="App">
+    <div id="App">
       <div id="header">
         <PageHeader />
         <UserLogin />
