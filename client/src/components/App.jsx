@@ -93,7 +93,8 @@ export default function App() {
   function play() {
     setPlayer(initialPlayer);
     setSolution(initialSolution);
-    setProblem(initialProblem);
+    const newProblem = generateProblem();
+    setProblem(newProblem);
     setScore(0);
     setGameOver(false);
     // setEnemies(initialEnemies);
