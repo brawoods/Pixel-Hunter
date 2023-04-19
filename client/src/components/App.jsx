@@ -37,6 +37,17 @@ export default function App() {
     }
   }, [player]);
 
+  function generateProblem() {
+    let a = Math.floor(Math.random() * 5);
+    let b = Math.floor(Math.random() * 5);
+    return [a, b];
+  }
+
+  useEffect(() => {
+    const newProblem = generateProblem();
+    setProblem(newProblem);
+  }, []);
+
   function changeDirection([x, y]) {
     const newPlayer = [...player];
     const nextPosition = [newPlayer[0] + x, newPlayer[1] + y];
