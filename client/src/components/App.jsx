@@ -10,12 +10,13 @@ export default function App() {
   const initialSolution = [scale - 17, scale - 17];
   const initialEnemies = [[scale - 15, scale - 15], [scale - 1, scale - 1]];
   const initialProblem = [1, 1];
-  const delay = 200;
+  const delay = 100;
 
   const [player, setPlayer] = useState(initialPlayer);
   const [problem, setProblem] = useState(initialProblem);
   const [solution, setSolution] = useState(initialSolution);
   const [enemies, setEnemies] = useState(initialEnemies);
+  const [menu, setMenu] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
 
@@ -83,8 +84,6 @@ export default function App() {
     // randomly select axis and direction
     const axis = Math.round(Math.random() * 1);
     const direction = Math.round(Math.random() * 1);
-    // console.log('axis', axis);
-    // console.log('direction', direction);
     // Y AXIS
     if (axis > 0) {
       if (direction > 0) {
@@ -136,8 +135,15 @@ export default function App() {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
+      if (menu) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.setTransform(scale / 4, 0, 0, scale / 4, 0, 0);
+        ctx.fillStyle = 'black';
+        ctx.fillText('PRESS PLAY', scale / 2 - 1, scale * 2);
       // GAME OVER
-      if (gameOver) {
+      } else if (gameOver) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'red';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -187,6 +193,7 @@ export default function App() {
 
   function play() {
     setScore(0);
+    setMenu(false);
     setGameOver(false);
     setPlayer(initialPlayer);
     const newSolution = setRandomPosition();
@@ -211,7 +218,7 @@ export default function App() {
         <GameHeader problem={problem} score={score} />
         {/* <Canvas /> */}
         <canvas id="canvas" ref={canvasRef} width="400" height="400" tabIndex={0} onKeyDown={(e) => move(e)} />
-        <button type="button" onClick={() => play()}>Play</button>
+        <button type="button" className="button" id="play" onClick={() => play()}>Play</button>
       </div>
     </div>
   );

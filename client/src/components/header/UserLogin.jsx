@@ -2,6 +2,6 @@ import React from 'react';
 
 export default function UserLogin() {
   return (
-    <div className="user-login">User login</div>
+    <button type="button" className="button">User login</button>
   );
 }
