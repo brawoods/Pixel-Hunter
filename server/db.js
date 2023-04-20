@@ -12,7 +12,7 @@ const PixelPlayer = mongoose.model('Pixel Player', pixelSchema);
 const getAll = async () => {
   const allScores = await PixelPlayer.find({})
     .sort({ score: -1 })
-    .limit(20);
+    .limit(10);
   return allScores;
 };
 

@@ -9,7 +9,7 @@ export default function App() {
   const initialPlayer = [scale / 2, scale / 2];
   // const initialSolution = [initialPlayer[0] * 5 - 10, initialPlayer[1] * 5 + 10];
   const initialSolution = [scale - 17, scale - 17];
-  const initialEnemies = [[scale - 15, scale - 15], [scale - 1, scale - 1]];
+  const initialEnemies = [[scale - 15, scale - 15]];
   const initialProblem = [1, 1];
   const delay = 100;
 
@@ -32,39 +32,7 @@ export default function App() {
     return [a, b];
   }
 
-  function checkCollision(piece1, piece2) {
-    if (piece1[0] === piece2[0] && piece1[1] === piece2[1]) {
-      return true;
-    }
-    return false;
-  }
-
-  function setRandomPosition() {
-    let pos = [];
-    function genCoord() {
-      const x = Math.floor((Math.random() * scale - 1) + 1);
-      const y = Math.floor((Math.random() * scale - 1) + 1);
-      if (player[0] === x || player[1] === y) {
-        genCoord();
-      }
-      pos = [x, y];
-    }
-    genCoord();
-    return pos;
-  }
-
-  function placePieces() {
-    const newSolution = setRandomPosition();
-    setSolution(newSolution);
-  }
-
-  function handleScore() {
-    const highScore = window.localStorage.getItem('pixelScore');
-    if (score > highScore) {
-      window.localStorage.setItem('pixelScore', score);
-    }
-  }
-
+  // MANAGE SCORING
   function getAllHighScores() {
     axios.get('/pixelhunter')
       .then((res) => setLeaderboard(res.data))
@@ -89,6 +57,40 @@ export default function App() {
       return;
     }
     setShowSaveGameModal(true);
+  }
+
+  function handleScore() {
+    const highScore = window.localStorage.getItem('pixelScore');
+    if (score > highScore) {
+      window.localStorage.setItem('pixelScore', score);
+    }
+  }
+
+  // MOVEMENT AND PIECE PLACEMENT
+  function checkCollision(piece1, piece2) {
+    if (piece1[0] === piece2[0] && piece1[1] === piece2[1]) {
+      return true;
+    }
+    return false;
+  }
+
+  function setRandomPosition() {
+    let pos = [];
+    function genCoord() {
+      const x = Math.floor((Math.random() * scale - 1) + 1);
+      const y = Math.floor((Math.random() * scale - 1) + 1);
+      if (player[0] === x || player[1] === y) {
+        genCoord();
+      }
+      pos = [x, y];
+    }
+    genCoord();
+    return pos;
+  }
+
+  function placeSolution() {
+    const newSolution = setRandomPosition();
+    setSolution(newSolution);
   }
 
   function changeDirection([x, y], piece) {
@@ -132,12 +134,19 @@ export default function App() {
     return changeDirection([1, 0], piece);
   }
 
+  function addNewEnemy() {
+    const newEnemies = [...enemies];
+    const newEnemy = setRandomPosition();
+    newEnemies.push(newEnemy);
+    setEnemies(newEnemies);
+  }
+
   // runs at 100ms in useInterval
   function runGame() {
     // check collision with solution
     if (checkCollision(player, solution)) {
       setScore(score + 1);
-      placePieces();
+      placeSolution();
     }
     // check collision with enemy
     enemies.forEach((enemy) => {
@@ -220,6 +229,13 @@ export default function App() {
     }
   }
 
+  // CHECK IF NEW ENEMY SHOULD BE ADDED
+  useEffect(() => {
+    if (score % 2 === 0) {
+      addNewEnemy();
+    }
+  }, [score]);
+
   function play() {
     setScore(0);
     setMenu(false);
@@ -227,8 +243,8 @@ export default function App() {
     setPlayer(initialPlayer);
     const newSolution = setRandomPosition();
     setSolution(newSolution);
-    const newProblem = generateProblem();
-    setProblem(newProblem);
+    // const newProblem = generateProblem();
+    // setProblem(newProblem);
     const newEnemies = enemies.map(() => {
       const newEnemy = setRandomPosition();
       return newEnemy;
@@ -241,7 +257,7 @@ export default function App() {
     <div id="App">
       <div id="header">
         <PageHeader />
-        <UserLogin />
+        {/* <UserLogin /> */}
       </div>
       <div id="body">
         <GameHeader problem={problem} score={score} />
