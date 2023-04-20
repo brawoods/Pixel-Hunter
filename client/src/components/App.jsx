@@ -10,7 +10,7 @@ export default function App() {
   const initialSolution = [scale - 17, scale - 17];
   const initialEnemies = [[scale - 15, scale - 15], [scale - 1, scale - 1]];
   const initialProblem = [1, 1];
-  const delay = 100;
+  const delay = 200;
 
   const [player, setPlayer] = useState(initialPlayer);
   const [problem, setProblem] = useState(initialProblem);
@@ -60,6 +60,49 @@ export default function App() {
     }
   }
 
+  function changeDirection([x, y], piece) {
+    const newPiece = [...piece];
+    const nextPosition = [newPiece[0] + x, newPiece[1] + y];
+    // check if play area boudary
+    if (nextPosition[0] < 0) {
+      nextPosition[0] = 0;
+    }
+    if (nextPosition[0] >= scale) {
+      nextPosition[0] = scale - 1;
+    }
+    if (nextPosition[1] < 0) {
+      nextPosition[1] = 0;
+    }
+    if (nextPosition[1] >= scale) {
+      nextPosition[1] = scale - 1;
+    }
+    return nextPosition;
+  }
+
+  function randomlyMove(piece) {
+    // randomly select axis and direction
+    const axis = Math.round(Math.random() * 1);
+    const direction = Math.round(Math.random() * 1);
+    // console.log('axis', axis);
+    // console.log('direction', direction);
+    // Y AXIS
+    if (axis > 0) {
+      if (direction > 0) {
+        // UP
+        return changeDirection([0, -1], piece);
+      }
+      // DOWN
+      return changeDirection([0, 1], piece);
+    }
+    // X AXIS
+    if (direction > 0) {
+      // LEFT
+      return changeDirection([-1, 0], piece);
+    }
+    // RIGHT
+    return changeDirection([1, 0], piece);
+  }
+
   // runs at 100ms in useInterval
   function runGame() {
     // check collision with solution
@@ -67,16 +110,20 @@ export default function App() {
       setScore(score + 1);
       placePieces();
     }
-    enemies.forEach((e) => {
-      if (checkCollision(player, e)) {
+    // check collision with enemy
+    enemies.forEach((enemy) => {
+      if (checkCollision(player, enemy)) {
         setGameOver(true);
         handleScore();
       }
     });
-
-    // check collision with enemy
-    // move solution and enemies
+    // MOVE ENEMIES
+    setEnemies(enemies.map((enemy) => {
+      const newEnemy = randomlyMove(enemy);
+      return newEnemy;
+    }));
   }
+
   // SETUP
   useEffect(() => {
     canvasRef.current.focus();
@@ -120,49 +167,27 @@ export default function App() {
   // SET GAME STATE
   useInterval(() => runGame(), delay);
 
-
-  function changeDirection([x, y], piece) {
-    const newPiece = [...piece];
-    const nextPosition = [newPiece[0] + x, newPiece[1] + y];
-    // check if play area boudary
-    if (nextPosition[0] < 0) {
-      nextPosition[0] = 0;
-    }
-    if (nextPosition[0] >= scale) {
-      nextPosition[0] = scale - 1;
-    }
-    if (nextPosition[1] < 0) {
-      nextPosition[1] = 0;
-    }
-    if (nextPosition[1] >= scale) {
-      nextPosition[1] = scale - 1;
-    }
-    setPlayer(nextPosition);
-  }
-
   function move(e) {
     switch (e.key) {
       case 'ArrowUp':
-        // console.log('up', player);
-        changeDirection([0, -1], player);
+        setPlayer(changeDirection([0, -1], player));
         break;
       case 'ArrowDown':
-        // console.log('down', player);
-        changeDirection([0, 1], player);
+        setPlayer(changeDirection([0, 1], player));
         break;
       case 'ArrowLeft':
-        // console.log('left', player);
-        changeDirection([-1, 0], player);
+        setPlayer(changeDirection([-1, 0], player));
         break;
       case 'ArrowRight':
-        // console.log('right', player);
-        changeDirection([1, 0], player);
+        setPlayer(changeDirection([1, 0], player));
         break;
       default:
     }
   }
 
   function play() {
+    setScore(0);
+    setGameOver(false);
     setPlayer(initialPlayer);
     const newSolution = setRandomPosition();
     setSolution(newSolution);
@@ -173,8 +198,6 @@ export default function App() {
       return newEnemy;
     });
     setEnemies(newEnemies);
-    setScore(0);
-    setGameOver(false);
     canvasRef.current.focus();
   }
 
