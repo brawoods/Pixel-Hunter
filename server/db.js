@@ -1,16 +1,30 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-mongoose.connect('mongod://127.0.0.1/pixelhunter');
+mongoose.connect('mongodb://127.0.0.1/pixelhunter');
 
 const pixelSchema = new mongoose.Schema({
   userName: String,
-  highScore: Number,
+  score: Number,
 });
 
 const PixelPlayer = mongoose.model('Pixel Player', pixelSchema);
 
-const findAndUpdate = () => {
+const getAll = async () => {
+  const allScores = await PixelPlayer.find({})
+    .sort({ score: -1 })
+    .limit(20);
+  return allScores;
+};
 
-}
-// find
-// update
+const findAndUpdate = async (player) => {
+  const user = await PixelPlayer.findOne({ userName: player.userName });
+  if (user) {
+    user.score = player.score;
+    await user.save();
+    return 'new score saved';
+  }
+  await PixelPlayer.create({ userName: player.userName, score: player.score });
+  return 'new player added to leaderboard';
+};
+
+module.exports = { findAndUpdate, getAll };

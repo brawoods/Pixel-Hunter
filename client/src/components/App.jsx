@@ -65,20 +65,22 @@ export default function App() {
     }
   }
 
-  function saveHighScore(name) {
-    const highScore = window.localStorage.getItem('pixelScore');
-    axios.put('/', {
-      userName: name,
-      score: highScore,
-    })
-      .then((res) => res)
+  function getAllHighScores() {
+    axios.get('/pixelhunter')
+      .then((res) => setLeaderboard(res.data))
       .catch((err) => err);
   }
 
-  function getAllHighScores() {
-    axios.get('/')
-      .then((res) => setLeaderboard(res))
-      .catch((err) => console.log(err));
+  function saveHighScore() {
+    const highScore = window.localStorage.getItem('pixelScore');
+    axios.put('/pixelhunter', {
+      userName: initials,
+      score: highScore,
+    })
+      .then(async () => {
+        await getAllHighScores();
+      })
+      .catch((err) => err);
   }
 
   function openCloseSave() {
@@ -154,8 +156,7 @@ export default function App() {
   // SETUP
   useEffect(() => {
     canvasRef.current.focus();
-    const newProblem = generateProblem();
-    setProblem(newProblem);
+    getAllHighScores();
   }, []);
 
   // PAINT TO CANVAS
@@ -248,7 +249,7 @@ export default function App() {
         <button type="button" className="button" id="play" onClick={() => play()}>Play</button>
         <button type="button" className="button" id="save" onClick={() => openCloseSave()}>Save</button>
         {showSaveGameModal && <input type="text" className="save-field" placeholder="Initials" onChange={(e) => setInitials(e.target.value)} />}
-        {showSaveGameModal && <button type="button" className="button" id="Submit" onClick={() => saveHighScore(initials)}>Submit</button>}
+        {showSaveGameModal && <button type="button" className="button" id="Submit" onClick={() => saveHighScore()}>Submit</button>}
       </div>
       <div>
         <Leaderboard leaderboard={leaderboard} />
