@@ -1,3 +1,4 @@
 import GameHeader from './GameHeader';
+import Leaderboard from './Leaderboard';
 
-export default GameHeader;
+export { GameHeader, Leaderboard };

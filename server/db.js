@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongod://1270.0.1/pixelhunter');
+mongoose.connect('mongod://127.0.0.1/pixelhunter');
 
 const pixelSchema = new mongoose.Schema({
   userName: String,
@@ -8,3 +8,9 @@ const pixelSchema = new mongoose.Schema({
 });
 
 const PixelPlayer = mongoose.model('Pixel Player', pixelSchema);
+
+const findAndUpdate = () => {
+
+}
+// find
+// update

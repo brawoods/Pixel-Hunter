@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import useInterval from '../hooks';
-import GameHeader from './game';
+import {GameHeader, Leaderboard} from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
@@ -19,6 +20,9 @@ export default function App() {
   const [menu, setMenu] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [initials, setInitials] = useState('');
+  const [leaderboard, setLeaderboard] = useState([{ userName: 'test', score: 3 }]);
+  const [showSaveGameModal, setShowSaveGameModal] = useState(false);
 
   const canvasRef = useRef(null);
   // CURRENTLY UNUSED
@@ -59,6 +63,30 @@ export default function App() {
     if (score > highScore) {
       window.localStorage.setItem('pixelScore', score);
     }
+  }
+
+  function saveHighScore(name) {
+    const highScore = window.localStorage.getItem('pixelScore');
+    axios.put('/', {
+      userName: name,
+      score: highScore,
+    })
+      .then((res) => res)
+      .catch((err) => err);
+  }
+
+  function getAllHighScores() {
+    axios.get('/')
+      .then((res) => setLeaderboard(res))
+      .catch((err) => console.log(err));
+  }
+
+  function openCloseSave() {
+    if (showSaveGameModal) {
+      setShowSaveGameModal(false);
+      return;
+    }
+    setShowSaveGameModal(true);
   }
 
   function changeDirection([x, y], piece) {
@@ -216,9 +244,14 @@ export default function App() {
       </div>
       <div id="body">
         <GameHeader problem={problem} score={score} />
-        {/* <Canvas /> */}
         <canvas id="canvas" ref={canvasRef} width="400" height="400" tabIndex={0} onKeyDown={(e) => move(e)} />
         <button type="button" className="button" id="play" onClick={() => play()}>Play</button>
+        <button type="button" className="button" id="save" onClick={() => openCloseSave()}>Save</button>
+        {showSaveGameModal && <input type="text" className="save-field" placeholder="Initials" onChange={(e) => setInitials(e.target.value)} />}
+        {showSaveGameModal && <button type="button" className="button" id="Submit" onClick={() => saveHighScore(initials)}>Submit</button>}
+      </div>
+      <div>
+        <Leaderboard leaderboard={leaderboard} />
       </div>
     </div>
   );
