@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import useInterval from '../hooks';
-import {GameHeader, Leaderboard} from './game';
+import {GameHeader, Leaderboard } from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
