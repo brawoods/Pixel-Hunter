@@ -20,7 +20,7 @@ export default function App() {
   const [score, setScore] = useState(0);
 
   const canvasRef = useRef(null);
-
+  // CURRENTLY UNUSED
   function generateProblem() {
     const a = Math.floor(Math.random() * 5);
     const b = Math.floor(Math.random() * 5);
@@ -53,6 +53,13 @@ export default function App() {
     setSolution(newSolution);
   }
 
+  function handleScore() {
+    const highScore = window.localStorage.getItem('pixelScore');
+    if (score > highScore) {
+      window.localStorage.setItem('pixelScore', score);
+    }
+  }
+
   // runs at 100ms in useInterval
   function runGame() {
     // check collision with solution
@@ -60,15 +67,17 @@ export default function App() {
       setScore(score + 1);
       placePieces();
     }
-    for (let e of enemies) {
+    enemies.forEach((e) => {
       if (checkCollision(player, e)) {
         setGameOver(true);
+        handleScore();
       }
-    }
+    });
+
     // check collision with enemy
     // move solution and enemies
   }
-
+  // SETUP
   useEffect(() => {
     canvasRef.current.focus();
     const newProblem = generateProblem();
@@ -80,31 +89,35 @@ export default function App() {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-      // player
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.setTransform(scale, 0, 0, scale, 0, 0);
-      ctx.fillStyle = 'green';
-      ctx.fillRect(player[0], player[1], 1, 1);
-      // solution
-
-      ctx.setTransform(scale, 0, 0, scale, 0, 0);
-      ctx.fillStyle = 'blue';
-      ctx.fillRect(solution[0], solution[1], 1, 1);
-      // number
-    //   const answer = (problem[0] + problem[1]).toString();
-    //   ctx.setTransform(scale / 5, 0, 0, scale / 5, 0, 0);
-    //   ctx.fillStyle = 'blue';
-    //   ctx.fillText(answer, solution[0], solution[1]);
-      // enemies
-      enemies.forEach(([x, y]) => {
-        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      // GAME OVER
+      if (gameOver) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'red';
-        ctx.fillRect(x, y, 1, 1);
-      });
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.setTransform(scale / 4, 0, 0, scale / 4, 0, 0);
+        ctx.fillStyle = 'black';
+        ctx.fillText('GAME OVER', scale / 2, scale * 2);
+      } else {
+        // player
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(player[0], player[1], 1, 1);
+        // solution
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(solution[0], solution[1], 1, 1);
+        // enemies
+        enemies.forEach(([x, y]) => {
+          ctx.setTransform(scale, 0, 0, scale, 0, 0);
+          ctx.fillStyle = 'red';
+          ctx.fillRect(x, y, 1, 1);
+        });
+      }
     }
-  }, [player, solution, enemies]);
+  }, [player, solution, enemies, gameOver]);
 
-  // interval to check game state
+  // SET GAME STATE
   useInterval(() => runGame(), delay);
 
 
@@ -155,9 +168,9 @@ export default function App() {
     setSolution(newSolution);
     const newProblem = generateProblem();
     setProblem(newProblem);
-    const newEnemies = enemies.map((enemy) => {
-      enemy = setRandomPosition();
-      return enemy;
+    const newEnemies = enemies.map(() => {
+      const newEnemy = setRandomPosition();
+      return newEnemy;
     });
     setEnemies(newEnemies);
     setScore(0);
