@@ -236,8 +236,8 @@ export default function App() {
     }
   }, [score]);
 
-  function play() {
-    setScore(0);
+  async function play() {
+    await setScore(0);
     setMenu(false);
     setGameOver(false);
     setPlayer(initialPlayer);
@@ -245,11 +245,11 @@ export default function App() {
     setSolution(newSolution);
     // const newProblem = generateProblem();
     // setProblem(newProblem);
-    const newEnemies = enemies.map(() => {
-      const newEnemy = setRandomPosition();
-      return newEnemy;
-    });
-    setEnemies(newEnemies);
+    // const newEnemies = enemies.map(() => {
+    //   const newEnemy = setRandomPosition();
+    //   return newEnemy;
+    // });
+    setEnemies(initialEnemies);
     canvasRef.current.focus();
   }
 
