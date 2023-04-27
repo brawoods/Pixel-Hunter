@@ -37,7 +37,7 @@ export default function App() {
   // MANAGE SCORING
   function getAllHighScores() {
     axios
-      .get('/pixelhunter')
+      .get('mongodb+srv://woodsbrandonm:nr25XJ20URqALGvP@cluster0.lbo79r5.mongodb.net/?retryWrites=true&w=majority')
       .then((res) => setLeaderboard(res.data))
       .catch((err) => err);
   }
@@ -45,7 +45,7 @@ export default function App() {
   function saveHighScore() {
     // const highScore = window.localStorage.getItem('pixelScore');
     axios
-      .put('/pixelhunter', {
+      .put('mongodb+srv://woodsbrandonm:nr25XJ20URqALGvP@cluster0.lbo79r5.mongodb.net/?retryWrites=true&w=majority', {
         userName: initials,
         score,
       })
