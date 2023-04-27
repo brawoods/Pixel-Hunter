@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://woodsbrandonm:nr25XJ20URqALGvP@cluster0.lbo79r5.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect('mongodb://127.0.0.1/pixelhunter');
 
 const pixelSchema = new mongoose.Schema({
   userName: String,
