@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import useInterval from '../hooks';
-import {GameHeader, Leaderboard } from './game';
+import { GameHeader, Leaderboard } from './game';
 import { PageHeader, UserLogin } from './header';
 
 export default function App() {
@@ -21,7 +21,9 @@ export default function App() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [initials, setInitials] = useState('');
-  const [leaderboard, setLeaderboard] = useState([{ userName: 'test', score: 3 }]);
+  const [leaderboard, setLeaderboard] = useState([
+    { userName: 'test', score: 3 },
+  ]);
   const [showSaveGameModal, setShowSaveGameModal] = useState(false);
 
   const canvasRef = useRef(null);
@@ -34,17 +36,19 @@ export default function App() {
 
   // MANAGE SCORING
   function getAllHighScores() {
-    axios.get('/pixelhunter')
+    axios
+      .get('/pixelhunter')
       .then((res) => setLeaderboard(res.data))
       .catch((err) => err);
   }
 
   function saveHighScore() {
-    const highScore = window.localStorage.getItem('pixelScore');
-    axios.put('/pixelhunter', {
-      userName: initials,
-      score: highScore,
-    })
+    // const highScore = window.localStorage.getItem('pixelScore');
+    axios
+      .put('/pixelhunter', {
+        userName: initials,
+        score,
+      })
       .then(async () => {
         await getAllHighScores();
       })
@@ -77,8 +81,8 @@ export default function App() {
   function setRandomPosition() {
     let pos = [];
     function genCoord() {
-      const x = Math.floor((Math.random() * scale - 1) + 1);
-      const y = Math.floor((Math.random() * scale - 1) + 1);
+      const x = Math.floor(Math.random() * scale - 1 + 1);
+      const y = Math.floor(Math.random() * scale - 1 + 1);
       if (player[0] === x || player[1] === y) {
         genCoord();
       }
@@ -156,10 +160,12 @@ export default function App() {
       }
     });
     // MOVE ENEMIES
-    setEnemies(enemies.map((enemy) => {
-      const newEnemy = randomlyMove(enemy);
-      return newEnemy;
-    }));
+    setEnemies(
+      enemies.map((enemy) => {
+        const newEnemy = randomlyMove(enemy);
+        return newEnemy;
+      }),
+    );
   }
 
   // SETUP
@@ -180,7 +186,7 @@ export default function App() {
         ctx.setTransform(scale / 4, 0, 0, scale / 4, 0, 0);
         ctx.fillStyle = 'black';
         ctx.fillText('PRESS PLAY', scale / 2 - 1, scale * 2);
-      // GAME OVER
+        // GAME OVER
       } else if (gameOver) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'red';
@@ -261,11 +267,49 @@ export default function App() {
       </div>
       <div id="body">
         <GameHeader problem={problem} score={score} />
-        <canvas id="canvas" ref={canvasRef} width="400" height="400" tabIndex={0} onKeyDown={(e) => move(e)} />
-        <button type="button" className="button" id="play" onClick={() => play()}>Play</button>
-        <button type="button" className="button" id="save" onClick={() => openCloseSave()}>Save</button>
-        {showSaveGameModal && <input type="text" className="save-field" placeholder="Initials" onChange={(e) => setInitials(e.target.value)} />}
-        {showSaveGameModal && <button type="button" className="button" id="Submit" onClick={() => saveHighScore()}>Submit</button>}
+        <canvas
+          id="canvas"
+          ref={canvasRef}
+          width="400"
+          height="400"
+          tabIndex={0}
+          onKeyDown={(e) => move(e)}
+        />
+        <button
+          type="button"
+          className="button"
+          id="play"
+          onClick={() => play()}
+        >
+          Play
+        </button>
+        <button
+          type="button"
+          className="button"
+          id="save"
+          onClick={() => openCloseSave()}
+        >
+          Save
+        </button>
+        {showSaveGameModal && (
+          <input
+            type="text"
+            className="save-field"
+            placeholder="Initials"
+            maxLength="3"
+            onChange={(e) => setInitials(e.target.value)}
+          />
+        )}
+        {showSaveGameModal && (
+          <button
+            type="button"
+            className="button"
+            id="Submit"
+            onClick={() => saveHighScore()}
+          >
+            Submit
+          </button>
+        )}
       </div>
       <div>
         <Leaderboard leaderboard={leaderboard} />
