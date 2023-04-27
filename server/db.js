@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('https://pixelhunter.onrender.com/pixelhunter');
+mongoose.connect('mongodb://https://pixelhunter.onrender.com/pixelhunter');
 
 const pixelSchema = new mongoose.Schema({
   userName: String,
