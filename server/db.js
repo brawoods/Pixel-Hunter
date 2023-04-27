@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://woodsbrandonm:<password>@cluster0.lbo79r5.mongodb.net/test');
+mongoose.connect('mongodb+srv://woodsbrandonm:<password>@cluster0.lbo79r5.mongodb.net/?retryWrites=true&w=majority');
 
 const pixelSchema = new mongoose.Schema({
   userName: String,
