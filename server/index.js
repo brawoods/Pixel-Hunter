@@ -13,12 +13,12 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-app.get('/pixelhunter', async (req, res) => {
+app.get('/', async (req, res) => {
   const leaderboard = await getAll();
   res.send(leaderboard);
 });
 
-app.put('/pixelhunter', async (req, res) => {
+app.put('/', async (req, res) => {
   const update = await findAndUpdate(req.body);
   res.send(update);
 });
