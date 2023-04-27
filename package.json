@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx webpack --watch --mode development & npx nodemon --watch ./server ./server/index.js",
-    "build": "npx webpack --mode production node ./server/index.js",
+    "build": "npx webpack --mode production",
     "start": "node ./server/index.js"
   },
   "author": "Brandon Woods",
